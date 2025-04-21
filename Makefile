@@ -8,11 +8,24 @@ RESET = \033[0m
 
 all: setup_dirs
 	@echo "$(GREEN)[+] Building and starting containers...$(RESET)"
-	$(COMPOSE) up --build -d
+	$(COMPOSE) up --build -d 
 
 setup_dirs:
 	@mkdir -p $(WP_DATA)
 	@mkdir -p $(DB_DATA)
+
+mb:
+	@echo "$(GREEN) Entering MariaDB container..."
+	@docker exec -it mariadb bash
+
+ng:
+	@echo "$(GREEN) Entering Nginx container..."
+	@docker exec -it nginx bash
+
+wp:
+	@echo "$(GREEN) Entering WordPress container..."
+	@docker exec -it wordpress bash
+
 
 down:
 	@echo "$(RED)[-] Stopping containers...$(RESET)"
