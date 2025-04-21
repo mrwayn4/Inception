@@ -1,0 +1,120 @@
+services:
+  mariadb:
+    image: mariadb:ibouram
+    container_name: mariadb
+    build: ./requirements/mariadb
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: always
+
+  nginx:
+    image: nginx:ibouram
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/wordpress
+    restart: always
+
+  wordpress:
+    image: wordpress:ibouram
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/wordpress
+    restart: always
+  redis:
+    image: redis:ibouram
+    container_name: redis
+    build: ./requirements/bonus/redis
+    ports:
+      - "6379:6379"
+    networks:
+      - inception
+    restart : always
+
+  static_web:
+    image: static_web:ibouram
+    container_name: static_web
+    build: ./requirements/bonus/static_web
+    ports:
+      - "8000:8000"
+    networks:
+      - inception
+    restart: always
+  
+  adminer:
+    image: adminer:ibouram
+    container_name: adminer
+    build: ./requirements/bonus/adminer
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    restart: always
+
+  service:
+    image: service:ibouram
+    container_name: service
+    build: ./requirements/bonus/service
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - inception
+    restart: always
+  ftp:
+    image: ftp:ibouram
+    container_name: ftp
+    build: ./requirements/bonus/ftp
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    networks:
+      - inception
+    volumes:
+      - wordpress:${FTP_HOME_DIR}
+    restart: always
+
+networks:
+  inception:
+    name: inception
+
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      device: /home/ibouram/data/wordpress
+      type: none
+      o: bind
+  mariadb:
+    driver: local
+    driver_opts:
+      device: /home/ibouram/data/mariadb
+      type: none
+      o: bind
