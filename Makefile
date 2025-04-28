@@ -26,6 +26,25 @@ wp:
 	@echo "$(GREEN) Entering WordPress container..."
 	@docker exec -it wordpress bash
 
+ftp:
+	@echo "$(GREEN) Entering FTP container..."
+	@docker exec -it ftp bash
+
+redis:
+	@echo "$(GREEN) Entering Redis container..."
+	@docker exec -it redis bash
+
+web:
+	@echo "$(GREEN) Entering Web container..."
+	@docker exec -it static_web bash
+
+admr:
+	@echo "$(GREEN) Entering Adminer container..."
+	@docker exec -it adminer bash
+
+srvc:
+	@echo "$(GREEN) Entering Service container..."
+	@docker exec -it service bash
 
 down:
 	@echo "$(RED)[-] Stopping containers...$(RESET)"

@@ -74,7 +74,7 @@ wp theme install twentytwentytwo --activate --path="$WP_DIR" --allow-root
 
 # ----------------- STEP 10: PHP-FPM -----------------
 echo "[INFO] Updating PHP-FPM to listen on port 9000..."
-sed -i 's|^listen = /run/php/php7.4-fpm.sock|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf
+sed -i 's|^listen = /run/php/php7.4-fpm.sock|listen = 9000|' /etc/php/7.4/fpm/pool.d/www.conf #replace listen to 9000 in www.conf which matches the configuration in Nginx (fastcgi_pass wordpress:9000;)
 
 echo "[INFO] Ensuring /run/php directory exists..."
 mkdir -p /run/php
